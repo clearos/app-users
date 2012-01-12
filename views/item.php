@@ -138,7 +138,7 @@ if (! $read_only) {
 ///////////////////////////////////////////////////////////////////////////////
 
 if (! empty($plugins)) {
-    echo fieldset_header(lang('users_plugins'));
+    echo fieldset_header(lang('users_app_policies'));
 
     foreach ($plugins as $plugin => $details) {
         $name = "user_info[plugins][$plugin][state]";
