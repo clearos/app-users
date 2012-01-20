@@ -73,17 +73,22 @@ class Users extends ClearOS_Controller
             return;
         }
 
+        // Show cache widget if using remote accounts (e.g. AD)
+        //-----------------------------------------------------
+
+        $this->load->module('accounts/cache');
+
+        if ($this->cache->needs_reset()) {
+            $this->cache->widget('users');
+            return;
+        }
+
         // Load libraries and grab status information
         //-------------------------------------------
 
-        try {
-            $this->lang->load('users');
-            $this->load->factory('users/User_Manager_Factory');
-            $this->load->factory('accounts/Accounts_Factory');
-        } catch (Exception $e) {
-            $this->page->view_exception($e);
-            return;
-        }
+        $this->lang->load('users');
+        $this->load->factory('users/User_Manager_Factory');
+        $this->load->factory('accounts/Accounts_Factory');
 
         // Load view data
         //---------------
@@ -99,7 +104,9 @@ class Users extends ClearOS_Controller
         // Load views
         //-----------
 
-        $this->page->view_form('summary', $data, lang('users_user_manager'));
+        $options['javascript'] = array(clearos_app_htdocs('accounts') . '/cache.js.php');
+
+        $this->page->view_form('users/summary', $data, lang('users_user_manager'), $options);
     }
 
     /**

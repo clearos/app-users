@@ -33,6 +33,7 @@
 // Load dependencies
 ///////////////////////////////////////////////////////////////////////////////
 
+$this->lang->load('accounts');
 $this->lang->load('users');
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,7 +42,7 @@ $this->lang->load('users');
 
 if ($mode === 'view') {
     $read_only = TRUE;
-    $anchors = array();
+    $anchors = array(anchor_javascript('reload_users_cache', lang('accounts_reload_cache'), 'high'));
 } else {
     $read_only = FALSE;
     $anchors = array(anchor_add('/app/users/add'));
