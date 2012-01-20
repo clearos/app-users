@@ -40,12 +40,15 @@ $this->lang->load('users');
 // View modes
 ///////////////////////////////////////////////////////////////////////////////
 
-if ($mode === 'view') {
-    $read_only = TRUE;
-    $anchors = array(anchor_javascript('reload_users_cache', lang('accounts_reload_cache'), 'high'));
-} else {
+if ($mode === 'edit') {
     $read_only = FALSE;
     $anchors = array(anchor_add('/app/users/add'));
+} else {
+    $read_only = TRUE;
+    if ($cache_action)
+        $anchors = array(anchor_javascript('reload_users_cache', lang('accounts_reload_cache'), 'high'));
+    else
+        $anchors = array();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

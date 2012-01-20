@@ -96,6 +96,7 @@ class Users extends ClearOS_Controller
         try {
             $data['users'] = $this->user_manager->get_core_details();
             $data['mode'] = ($this->accounts->get_capability() === Accounts_Engine::CAPABILITY_READ_WRITE) ? 'edit' : 'view';
+            $data['cache_action'] = ($this->accounts_configuration->get_driver() == 'active_directory') ? TRUE : FALSE;
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
