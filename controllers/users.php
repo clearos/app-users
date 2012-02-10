@@ -283,10 +283,16 @@ class Users extends ClearOS_Controller
 
         if ($this->input->post('submit') && ($form_ok)) {
             try {
-                if ($form_type === 'add')
+                if ($form_type === 'add') {
                     $this->user->add($this->input->post('user_info'), $this->input->post('password'));
-                else if ($form_type === 'edit')
+                } else if ($form_type === 'edit') {
                     $this->user->update($this->input->post('user_info'));
+                    $this->user->reset_password(
+                        $this->input->post('password'),
+                        $this->input->post('verify'),
+                        $this->session->userdata('username')
+                    );
+                }
 
                 $this->page->set_status_updated();
                 redirect('/users');
