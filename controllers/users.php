@@ -234,12 +234,12 @@ class Users extends ClearOS_Controller
         // Validate prep
         //--------------
 
-        // FIXME: how to catch validation for
-        // - full name uniqueness
-        // - password/verify
+        // FIXME: catch validation for full name uniqueness
         // FIXME: add groups
 
         $info_map = $this->user->get_info_map();
+        $password = ($this->input->post('password')) ? $this->input->post('password') : '';
+        $verify = ($this->input->post('verify')) ? $this->input->post('verify') : '';
 
         // Validate core
         //--------------
@@ -261,7 +261,17 @@ class Users extends ClearOS_Controller
                 foreach ($parameters as $key => $details) {
                     $required = (isset($details['required'])) ? $details['required'] : FALSE;
                     $full_key = 'user_info[extensions][' . $extension . '][' . $key . ']';
-                    $this->form_validation->set_policy($full_key, $details['validator_class'], $details['validator'], $required);
+
+                    // Note: string_array handling is not fully baked.  It works okay for aliases.
+                    if ($details['type'] === 'string_array') {
+                        $user_info = $this->input->post('user_info');
+                        for ($inx = 0; $inx < count($user_info['extensions'][$extension][$key]); $inx++) {
+                            $full_key = 'user_info[extensions][' . $extension . '][' . $key . '][' . $inx . ']';
+                            $this->form_validation->set_policy($full_key, $details['validator_class'], $details['validator'], $required);
+                        }
+                    } else {
+                        $this->form_validation->set_policy($full_key, $details['validator_class'], $details['validator'], $required);
+                    }
                 }
             }
         }
@@ -278,6 +288,16 @@ class Users extends ClearOS_Controller
 
         $form_ok = $this->form_validation->run();
 
+        // Extra validation
+        //-----------------
+
+        if ($form_ok) {
+            if ($password != $verify) {
+                $this->form_validation->set_error('verify', lang('base_password_and_verify_do_not_match'));
+                $form_ok = FALSE;
+            }
+        }
+
         // Handle form submit
         //-------------------
 
@@ -287,11 +307,15 @@ class Users extends ClearOS_Controller
                     $this->user->add($this->input->post('user_info'), $this->input->post('password'));
                 } else if ($form_type === 'edit') {
                     $this->user->update($this->input->post('user_info'));
-                    $this->user->reset_password(
-                        $this->input->post('password'),
-                        $this->input->post('verify'),
-                        $this->session->userdata('username')
-                    );
+
+                    // Only upldate the password if it was changed
+                    if ($password || $verify) {
+                        $this->user->reset_password(
+                            $this->input->post('password'),
+                            $this->input->post('verify'),
+                            $username
+                        );
+                    }
                 }
 
                 $this->page->set_status_updated();
@@ -307,16 +331,14 @@ class Users extends ClearOS_Controller
 
         try {
             $data['form_type'] = $form_type;
-
             $data['info_map'] = $info_map;
+            $data['extensions'] = $this->accounts->get_extensions();
+            $data['plugins'] = $this->accounts->get_plugins();
 
             if ($form_type === 'add')
                 $data['user_info'] = $this->user->get_info_defaults();
             else
                 $data['user_info'] = $this->user->get_info();
-
-            $data['extensions'] = $this->accounts->get_extensions();
-            $data['plugins'] = $this->accounts->get_plugins();
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
