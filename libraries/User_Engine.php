@@ -108,6 +108,11 @@ class User_Engine extends Engine
     const CAPABILITY_READ_ONLY = 'read_only';
     const CAPABILITY_READ_WRITE = 'read_write';
 
+    // Misc
+    //-----
+
+    const MAX_PASSWORD_LENGTH = 100;
+
     ///////////////////////////////////////////////////////////////////////////////
     // V A R I A B L E S
     ///////////////////////////////////////////////////////////////////////////////
@@ -132,5 +137,24 @@ class User_Engine extends Engine
     public function __construct()
     {
         clearos_profile(__METHOD__, __LINE__);
+    }
+
+    /**
+     * Password validation routine.
+     *
+     * @param string $password password
+     *
+     * @return string error message if password is invalid
+     */
+
+    public function validate_password($password)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        // The low-level password policy engine handles minimum password lengths,
+        // password histories, etc.
+
+        if (strlen($password) > self::MAX_PASSWORD_LENGTH)
+            return lang('users_password_invalid');
     }
 }
