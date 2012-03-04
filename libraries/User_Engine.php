@@ -81,11 +81,17 @@ class User_Engine extends Engine
     // User types
     //-----------
 
-    const TYPE_BUILTIN = 'builtin';
-    const TYPE_NORMAL = 'normal';
     const TYPE_SYSTEM = 'system';
-    const TYPE_UNKNOWN = 'unknown';
-    const TYPE_ALL = 'all';
+    const TYPE_NORMAL = 'normal';
+    const TYPE_BUILTIN = 'builtin';
+
+    // User filters
+    //-------------
+
+    const FILTER_SYSTEM = 1;
+    const FILTER_NORMAL = 2;
+    const FILTER_BUILTIN = 4;
+    const FILTER_ALL = 7;
 
     // Password types
     //---------------

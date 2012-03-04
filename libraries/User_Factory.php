@@ -87,34 +87,6 @@ clearos_load_library('accounts/Accounts_Unavailable_Exception');
 class User_Factory extends Engine
 {
     ///////////////////////////////////////////////////////////////////////////////
-    // C O N S T A N T S
-    ///////////////////////////////////////////////////////////////////////////////
-
-    // User types
-    //-----------
-
-    const TYPE_BUILTIN = 'builtin';
-    const TYPE_NORMAL = 'normal';
-    const TYPE_SYSTEM = 'system';
-    const TYPE_UNKNOWN = 'unknown';
-    const TYPE_ALL = 'all';
-
-    // Password types
-    //---------------
-
-    const PASSWORD_TYPE_SHA = 'sha';
-    const PASSWORD_TYPE_SHA1 = 'sha1';
-    const PASSWORD_TYPE_NT = 'nt';
-
-    // Account status codes
-    //---------------------
-
-    const STATUS_LOCKED = 'locked';
-    const STATUS_UNLOCKED = 'unlocked';
-    const STATUS_ENABLED = 'enabled';
-    const STATUS_DISABLED = 'disabled';
-
-    ///////////////////////////////////////////////////////////////////////////////
     // M E T H O D S
     ///////////////////////////////////////////////////////////////////////////////
 
