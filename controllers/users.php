@@ -296,7 +296,31 @@ class Users extends ClearOS_Controller
                 $this->form_validation->set_error('verify', lang('base_password_and_verify_do_not_match'));
                 $form_ok = FALSE;
             }
+
         }
+
+        // Mail aliases, users, and groups are all intertwined and must be unique.
+        // This scenario just doesn't fit well with the existing framework, so we
+        // kludge it a bit here.
+        //-----------------------------------------------------------------------
+        // TODO: sanity check this with Samba 4
+
+        if ($form_ok && $this->input->post('user_info')) {
+            $user_info = $this->input->post('user_info');
+
+            if (isset($user_info['extensions']['mail']['aliases'])) {
+                $this->load->library('mail_extension/OpenLDAP_User_Extension');
+
+                for ($inx = 0; $inx < count($user_info['extensions']['mail']['aliases']); $inx++) {
+                    $error = $this->openldap_user_extension->is_unique_alias($username, $user_info['extensions']['mail']['aliases'][$inx]);
+                    if ($error) {
+                        $this->form_validation->set_error('user_info[extensions][mail][aliases][' . $inx . ']', $error);
+                        $form_ok = FALSE;
+                    }
+                }
+            }
+        }
+        
 
         // Handle form submit
         //-------------------

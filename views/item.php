@@ -189,8 +189,9 @@ foreach ($info_map['extensions'] as $extension => $parameters) {
 
                 for ($inx = 1; $inx < count($value); $inx++) {
                     $description = ($inx === 0) ? $description : '';
-                    $fields .= field_input($name . "[1]", $value[$inx], $description, $field_read_only);
+                    $fields .= field_input($name . "[$inx]", $value[$inx], $description, $field_read_only);
                 }
+
                 // Show an extra blank field
                 if ($form_type !== 'view')
                     $fields .= field_input($name . "[$inx]", '', '', $field_read_only);
