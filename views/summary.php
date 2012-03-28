@@ -107,9 +107,12 @@ sort($items);
 // Summary table
 ///////////////////////////////////////////////////////////////////////////////
 
+$options['default_rows'] = 50;
+
 echo summary_table(
     lang('users_user_manager'),
     $anchors,
     $headers,
-    $items
+    $items,
+    $options
 );
