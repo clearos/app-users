@@ -1,7 +1,7 @@
 
 Name: app-users
 Epoch: 1
-Version: 1.0.10
+Version: 1.1.0
 Release: 1%{dist}
 Summary: Users
 License: GPLv3
@@ -17,7 +17,7 @@ Requires: app-groups
 The users app allows an administrator to create, delete and modify users on the system.  Marketplace apps that plugin directly to the user directory will automatically display options available to a user account.
 
 %package core
-Summary: Users - APIs and install
+Summary: Users - Core
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
