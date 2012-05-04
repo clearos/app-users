@@ -92,12 +92,34 @@ if (!isset($argv[1])) {
 $username = $argv[1];
 
 try {
-	$user = User::create($username);
+	$user = User::create("$username");
 	$exists = $user->exists();
 } catch (Engine_Exception $e) {
 	echo "userpasswd: failed " . $e->get_message() . "\n";
 	exit(1);
 }
+
+// TODO: userpassword is getting called for machine accounts when a
+// "net rpc join" is performed.  This is a workaround for now.
+if (preg_match('/_$/', $username)) {
+	ttyecho(false); // Disable echo to terminal
+
+	echo "Changing password for user $username\nNew password: ";
+	$password = trim(fgets(STDIN));
+
+	echo "\nRetype new password: ";
+	$verify = trim(fgets(STDIN));
+
+	echo "\n";
+
+	ttyecho(true); // Re-enable echo to terminal
+
+	echo "userpasswd: all authentication tokens updated successfully.\n";
+
+	clearos_log("userpasswd", "password change skipped machine $username");
+	exit(0);
+}
+// end workaround
 
 if (! $exists) {
 	echo "userpasswd: Unknown user name '$username'\n";
