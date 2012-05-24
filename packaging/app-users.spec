@@ -22,6 +22,7 @@ License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-accounts-core
+Requires: app-storage-core
 Requires: system-users-driver
 Requires: openssl
 
@@ -39,6 +40,7 @@ mkdir -p -m 755 %{buildroot}/usr/clearos/apps/users
 cp -r * %{buildroot}/usr/clearos/apps/users/
 
 install -D -m 0755 packaging/userpasswd %{buildroot}/usr/sbin/userpasswd
+install -D -m 0644 packaging/users_default.conf %{buildroot}/etc/clearos/storage.d/users_default.conf
 
 %post
 logger -p local6.notice -t installer 'app-users - installing'
@@ -82,3 +84,4 @@ exit 0
 /usr/clearos/apps/users/language
 /usr/clearos/apps/users/libraries
 /usr/sbin/userpasswd
+/etc/clearos/storage.d/users_default.conf

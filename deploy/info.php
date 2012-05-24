@@ -32,12 +32,14 @@ $app['requires'] = array(
 
 $app['core_requires'] = array(
     'app-accounts-core',
+    'app-storage-core',
     'system-users-driver', 
     'openssl',
 );
 
 
 $app['core_file_manifest'] = array(
+    'users_default.conf' => array ('target' => '/etc/clearos/storage.d/users_default.conf'),
     'userpasswd' => array(
         'target' => '/usr/sbin/userpasswd',
         'mode' => '0755',
