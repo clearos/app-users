@@ -36,6 +36,7 @@
 use \clearos\apps\accounts\Accounts_Engine as Accounts_Engine;
 use \clearos\apps\accounts\Accounts_Not_Initialized_Exception as Accounts_Not_Initialized_Exception;
 use \clearos\apps\accounts\Accounts_Driver_Not_Set_Exception as Accounts_Driver_Not_Set_Exception;
+use \clearos\apps\groups\Group_Engine as Group_Engine;
 
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
@@ -229,14 +230,15 @@ class Users extends ClearOS_Controller
 
         $this->lang->load('users');
         $this->load->factory('users/User_Factory', $username);
+        $this->load->factory('groups/Group_Manager_Factory');
         $this->load->factory('accounts/Accounts_Factory');
 
         // Validate prep
         //--------------
 
         // FIXME: catch validation for full name uniqueness
-        // FIXME: add groups
 
+        $groups = $this->group_manager->get_list(Group_Engine::FILTER_NORMAL);
         $info_map = $this->user->get_info_map();
         $password = ($this->input->post('password')) ? $this->input->post('password') : '';
         $verify = ($this->input->post('verify')) ? $this->input->post('verify') : '';
@@ -286,6 +288,12 @@ class Users extends ClearOS_Controller
             }
         }
 
+        // Validate groups
+        //----------------
+    
+        foreach ($groups as $group)
+            $this->form_validation->set_policy("group[$group]", 'accounts/Accounts_Engine', 'validate_plugin_state');
+
         $form_ok = $this->form_validation->run();
 
         // Extra validation
@@ -321,18 +329,21 @@ class Users extends ClearOS_Controller
             }
         }
         
-
         // Handle form submit
         //-------------------
 
         if ($this->input->post('submit') && ($form_ok)) {
             try {
+
+                // User info
+                //----------
+
                 if ($form_type === 'add') {
                     $this->user->add($this->input->post('user_info'), $this->input->post('password'));
                 } else if ($form_type === 'edit') {
                     $this->user->update($this->input->post('user_info'));
 
-                    // Only upldate the password if it was changed
+                    // Only update the password if it was changed
                     if ($password || $verify) {
                         $this->user->reset_password(
                             $this->input->post('password'),
@@ -341,6 +352,21 @@ class Users extends ClearOS_Controller
                         );
                     }
                 }
+
+                // Group memberships
+                //------------------
+
+                $group_memberships = array();
+                $group_inputs = $this->input->post('group');
+
+                foreach ($groups as $group) {
+                    $group_memberships[$group] = (isset($group_inputs[$group]) && ($group_inputs[$group] == 'on')) ? TRUE : FALSE;
+                }
+
+                $this->user->set_group_memberships($group_memberships);
+
+                // Page update
+                //------------
 
                 $this->page->set_status_updated();
                 redirect('/users');
@@ -358,6 +384,7 @@ class Users extends ClearOS_Controller
             $data['info_map'] = $info_map;
             $data['extensions'] = $this->accounts->get_extensions();
             $data['plugins'] = $this->accounts->get_plugins();
+            $data['groups'] = $groups;
 
             if ($form_type === 'add')
                 $data['user_info'] = $this->user->get_info_defaults();

@@ -206,11 +206,29 @@ foreach ($info_map['extensions'] as $extension => $parameters) {
     }
 }
 
-echo field_button_set($buttons);
+
+///////////////////////////////////////////////////////////////////////////////
+// Groups
+///////////////////////////////////////////////////////////////////////////////
+
+if (! empty($groups)) {
+    $group_radios = array();
+
+    foreach ($groups as $group) {
+        $group_state = in_array($group, $user_info['groups']);
+        $group_radios[] = field_checkbox("group[$group]", $group_state, $group, $read_only);
+    }
+
+    echo fieldset_header(lang('users_groups'));
+    echo field_radio_set('', $group_radios);
+    echo fieldset_footer();
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Form close
 ///////////////////////////////////////////////////////////////////////////////
+
+echo field_button_set($buttons);
 
 echo form_footer();
 echo form_close();
