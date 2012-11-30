@@ -54,3 +54,4 @@ $lang['users_username_is_reserved'] = 'Username is reserved.';
 $lang['users_user'] = 'User';
 $lang['users_plugins'] = 'Plugins';
 $lang['users_groups'] = 'Groups';
+$lang['users_users_storage'] = 'Users Storage';
