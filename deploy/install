@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Initialize storage
+#-------------------
+
+/usr/sbin/storage
