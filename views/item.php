@@ -216,7 +216,8 @@ if (! empty($groups)) {
 
     foreach ($groups as $group) {
         $group_state = in_array($group, $user_info['groups']);
-        $group_radios[] = field_checkbox("group[$group]", $group_state, $group, $read_only);
+        $group_key = preg_replace('/ /', ':', $group);  // space not allowed in keys, use colon
+        $group_radios[] = field_checkbox("group[$group_key]", $group_state, $group, $read_only);
     }
 
     echo fieldset_header(lang('users_groups'));

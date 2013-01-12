@@ -360,7 +360,8 @@ class Users extends ClearOS_Controller
                 $group_inputs = $this->input->post('group');
 
                 foreach ($groups as $group) {
-                    $group_memberships[$group] = (isset($group_inputs[$group]) && ($group_inputs[$group] == 'on')) ? TRUE : FALSE;
+                    $group_key = preg_replace('/ /', ':', $group);  // space not allowed in keys, use colon
+                    $group_memberships[$group] = (isset($group_inputs[$group_key]) && ($group_inputs[$group_key] == 'on')) ? TRUE : FALSE;
                 }
 
                 $this->user->set_group_memberships($group_memberships);
