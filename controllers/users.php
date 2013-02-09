@@ -360,7 +360,7 @@ class Users extends ClearOS_Controller
                 $group_inputs = $this->input->post('group');
 
                 foreach ($groups as $group) {
-                    $group_key = preg_replace('/ /', ':', $group);  // space not allowed in keys, use colon
+                    $group_key = strtr(base64_encode($group), '+/=', '-_:'); // spaces and dollars not allowed, so munge
                     $group_memberships[$group] = (isset($group_inputs[$group_key]) && ($group_inputs[$group_key] == 'on')) ? TRUE : FALSE;
                 }
 
