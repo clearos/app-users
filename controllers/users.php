@@ -3,9 +3,9 @@
 /**
  * Users controller.
  *
- * @category   Apps
- * @package    Users
- * @subpackage Controllers
+ * @category   apps
+ * @package    users
+ * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
@@ -45,9 +45,9 @@ use \clearos\apps\groups\Group_Engine as Group_Engine;
 /**
  * Users controller.
  *
- * @category   Apps
- * @package    Users
- * @subpackage Controllers
+ * @category   apps
+ * @package    users
+ * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later

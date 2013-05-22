@@ -3,9 +3,9 @@
 /**
  * User already exists exception.
  *
- * @category   Apps
- * @package    Users
- * @subpackage Exceptions
+ * @category   apps
+ * @package    users
+ * @subpackage libraries
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2003-2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/lgpl.html GNU Lesser General Public License version 3 or later
@@ -71,9 +71,9 @@ clearos_load_library('base/Engine_Exception');
  * added to the constructor.  The end user will then see a more 
  * informative error message.
  *
- * @category   Apps
- * @package    Users
- * @subpackage Exceptions
+ * @category   apps
+ * @package    users
+ * @subpackage libraries
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2003-2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/lgpl.html GNU Lesser General Public License version 3 or later
