@@ -391,6 +391,15 @@ class Users extends ClearOS_Controller
                 $data['user_info'] = $this->user->get_info_defaults();
             else
                 $data['user_info'] = $this->user->get_info();
+
+            // If Zarafa (licensed) is installed, get license stats
+            if (clearos_library_installed('zarafa_small_business/Zarafa_Licensed')) {
+                $this->load->library('zarafa_small_business/Zarafa_Licensed');
+                $data['zarafa'] = $this->zarafa_licensed->get_cal_stats();
+            } else if (clearos_library_installed('zarafa_professional/Zarafa_Licensed')) {
+                $this->load->library('zarafa_professional/Zarafa_Licensed');
+                $data['zarafa'] = $this->zarafa_licensed->get_cal_stats();
+            }
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
