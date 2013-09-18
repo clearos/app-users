@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'users';
-$app['version'] = '1.4.21';
+$app['version'] = '1.5.4';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -33,7 +33,6 @@ $app['requires'] = array(
 $app['core_requires'] = array(
     'app-accounts-core',
     'app-storage-core >= 1:1.4.7',
-    'system-users-driver', 
     'openssl',
 );
 
