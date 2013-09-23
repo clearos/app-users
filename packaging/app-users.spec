@@ -1,7 +1,7 @@
 
 Name: app-users
 Epoch: 1
-Version: 1.5.4
+Version: 1.5.5
 Release: 1%{dist}
 Summary: Users
 License: GPLv3
@@ -21,6 +21,7 @@ Summary: Users - Core
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
+Requires: app-base >= 1:1.5.5
 Requires: app-accounts-core
 Requires: app-storage-core >= 1:1.4.7
 Requires: openssl

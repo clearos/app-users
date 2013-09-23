@@ -98,6 +98,14 @@ class Users extends ClearOS_Controller
             $data['users'] = $this->user_manager->get_core_details();
             $data['mode'] = ($this->accounts->get_capability() === Accounts_Engine::CAPABILITY_READ_WRITE) ? 'edit' : 'view';
             $data['cache_action'] = ($this->accounts_configuration->get_driver() == 'active_directory') ? TRUE : FALSE;
+
+            // Load subscription information
+            if (clearos_library_installed('clearcenter/Subscription_Manager')) {
+                $this->load->library('clearcenter/Subscription_Manager');
+                $data['subscriptions'] = $this->subscription_manager->get_subscriptions();
+            } else {
+                $data['subscriptions'] = array();
+            }
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
@@ -392,13 +400,12 @@ class Users extends ClearOS_Controller
             else
                 $data['user_info'] = $this->user->get_info();
 
-            // If Zarafa (licensed) is installed, get license stats
-            if (clearos_library_installed('zarafa_small_business/Zarafa_Licensed')) {
-                $this->load->library('zarafa_small_business/Zarafa_Licensed');
-                $data['zarafa'] = $this->zarafa_licensed->get_cal_stats();
-            } else if (clearos_library_installed('zarafa_professional/Zarafa_Licensed')) {
-                $this->load->library('zarafa_professional/Zarafa_Licensed');
-                $data['zarafa'] = $this->zarafa_licensed->get_cal_stats();
+            // Load subscription information
+            if (clearos_library_installed('clearcenter/Subscription_Manager')) {
+                $this->load->library('clearcenter/Subscription_Manager');
+                $data['limits'] = $this->subscription_manager->get_extension_limits();
+            } else {
+                $data['limits'] = array();
             }
         } catch (Exception $e) {
             $this->page->view_exception($e);

@@ -29,50 +29,12 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // Load dependencies
 ///////////////////////////////////////////////////////////////////////////////
 
 $this->lang->load('base');
 $this->lang->load('users');
-
-///////////////////////////////////////////////////////////////////////////////
-// Zarafa Warnings (if applicable)
-///////////////////////////////////////////////////////////////////////////////
-
-if (isset($zarafa) && $zarafa['available'] <= 3) {
-    // Load common lang
-    $this->lang->load('zarafa');
-    $link = anchor_custom('/app/marketplace/view/zarafa_small_business_5_users', lang('zarafa_purchase_cals'));
-
-    if (clearos_library_installed('zarafa_professional/Zarafa_Licensed'))
-        $link = anchor_custom('/app/marketplace/view/zarafa_professional_5_users', lang('zarafa_purchase_cals'));
-
-    if ($zarafa['available'] == 0) {
-        echo infobox_warning(
-            lang('base_warning'),
-            sprintf(
-                lang('zarafa_user_limit_count'),
-                $zarafa['used'],
-                $zarafa['total'],
-                $zarafa['available']
-            ) .
-            "<div style='text-align: center; padding-top: 5px;'>$link</div>" 
-        );
-    } else {
-        echo infobox_highlight(
-            lang('base_warning'),
-            sprintf(
-                lang('zarafa_user_limit_count'),
-                $zarafa['used'],
-                $zarafa['total'],
-                $zarafa['available']
-            ) .
-            "<div style='text-align: center; padding-top: 5px;'>$link</div>" 
-        );
-    }
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Form modes
@@ -204,11 +166,19 @@ foreach ($info_map['extensions'] as $extension => $parameters) {
             $description =  $details['description'];
             $field_read_only = $read_only;
 
-            // If zarafa and CAL available == 0, disable Zarafa extension to prevent user
-            // from borking they're Zarafa mail server by going over count.
-            if ($extension == 'zarafa' && preg_match('/account_flag|administrator_flag/', $key_name) && isset($zarafa) && $zarafa['available'] == 0) {
-                $field_read_only = TRUE;
-                $value = 0;
+            // If an extension has reached its user limit, disable the field listed in user_key
+            // to prevent administrator from borking their server by going over count.
+
+            if (array_key_exists($extension, $limits) && ($key_name === $limits[$extension]['user_key'])) {
+                // if in "add" mode, set to read-only and set value to disabled
+                if ($form_type === 'add') {
+                    $field_read_only = TRUE;
+                    $value = 0;
+                // If in edit mode, set to read-only if account is disabled (i.e. allow active accounts to be disabled)
+                } else if (($form_type === 'edit') && ($value == 0)) {
+                    $field_read_only = TRUE;
+                    $value = 0;
+                }
             }
 
             if (isset($details['field_priority']) && ($details['field_priority'] === 'hidden')) {
@@ -249,7 +219,6 @@ foreach ($info_map['extensions'] as $extension => $parameters) {
         echo fieldset_footer();
     }
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Groups

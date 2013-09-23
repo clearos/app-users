@@ -37,6 +37,49 @@ $this->lang->load('accounts');
 $this->lang->load('users');
 
 ///////////////////////////////////////////////////////////////////////////////
+// Subscription warnings (if applicable)
+///////////////////////////////////////////////////////////////////////////////
+
+if (!empty($subscriptions)) {
+
+    foreach ($subscriptions as $app => $subscription) {
+        if ($subscription['warning_message'] && $subscription['type'] === 'user') {
+            $link = '/app/marketplace/view/' . $subscription['marketplace_link'];
+            $buttons = array(
+                anchor_custom($link, lang('base_marketplace'))
+            );
+
+            $item['title'] = $subscription['app_name'];
+            $item['action'] = $link;
+            $item['anchors'] = button_set($buttons);
+            $item['details'] = array(
+                $subscription['app_name'],
+                $subscription['warning_message'],
+            );
+
+           $warning_items[] = $item;
+        }
+    }
+
+    // FIXME: a nice warning icon would be nice
+    $headers = array(
+        lang('base_app'),
+        lang('base_subscription')
+    );
+
+    $options['default_rows'] = 50;
+    $options['sort'] = FALSE;
+
+    echo summary_table(
+        lang('base_subscription_warnings'),
+        array(),
+        $headers,
+        $warning_items,
+        $options
+    );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // View modes
 ///////////////////////////////////////////////////////////////////////////////
 

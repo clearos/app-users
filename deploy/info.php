@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'users';
-$app['version'] = '1.5.4';
+$app['version'] = '1.5.5';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -31,6 +31,7 @@ $app['requires'] = array(
 );
 
 $app['core_requires'] = array(
+    'app-base >= 1:1.5.5',
     'app-accounts-core',
     'app-storage-core >= 1:1.4.7',
     'openssl',
