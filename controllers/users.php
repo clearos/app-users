@@ -240,12 +240,14 @@ class Users extends ClearOS_Controller
         $this->load->factory('users/User_Factory', $username);
         $this->load->factory('groups/Group_Manager_Factory');
         $this->load->factory('accounts/Accounts_Factory');
+        $this->load->library('accounts/Accounts_Configuration');
 
         // Validate prep
         //--------------
 
         // FIXME: catch validation for full name uniqueness
 
+        $driver = $this->accounts_configuration->get_driver();
         $groups = $this->group_manager->get_list(Group_Engine::FILTER_NORMAL);
         $info_map = $this->user->get_info_map();
         $password = ($this->input->post('password')) ? $this->input->post('password') : '';
@@ -324,7 +326,7 @@ class Users extends ClearOS_Controller
         if ($form_ok && $this->input->post('user_info')) {
             $user_info = $this->input->post('user_info');
 
-            if (isset($user_info['extensions']['mail']['aliases'])) {
+            if (isset($user_info['extensions']['mail']['aliases']) && ($driver === 'openldap_directory')) {
                 $this->load->library('mail_extension/OpenLDAP_User_Extension');
 
                 for ($inx = 0; $inx < count($user_info['extensions']['mail']['aliases']); $inx++) {
