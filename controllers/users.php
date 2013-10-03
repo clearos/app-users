@@ -349,13 +349,13 @@ class Users extends ClearOS_Controller
                 //----------
 
                 if ($form_type === 'add') {
-                    $this->user->add($this->input->post('user_info'), $this->input->post('password'));
+                    $add_retval = $this->user->add($this->input->post('user_info'), $this->input->post('password'));
                 } else if ($form_type === 'edit') {
                     $this->user->update($this->input->post('user_info'));
 
                     // Only update the password if it was changed
                     if ($password || $verify) {
-                        $this->user->reset_password(
+                        $retval = $this->user->reset_password(
                             $this->input->post('password'),
                             $this->input->post('verify'),
                             $username
@@ -379,8 +379,20 @@ class Users extends ClearOS_Controller
                 // Page update
                 //------------
 
-                $this->page->set_status_updated();
-                redirect('/users');
+                // Password change requests cannot be 100% pre-validated 
+                // (for example, a password that already exists in the password
+                // history).  Handle page status a bit differently.
+
+                if (!empty($retval)) {
+                    $this->form_validation->set_error('verify', $retval);
+                } else if (!empty($add_retval)) {
+                    $this->edit($username);
+                    return;
+                } else {
+                    $this->page->set_status_updated();
+                    redirect('/users');
+                }
+
             } catch (Exception $e) {
                 $this->page->view_exception($e);
                 return;

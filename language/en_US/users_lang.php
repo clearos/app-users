@@ -55,3 +55,5 @@ $lang['users_user'] = 'User';
 $lang['users_plugins'] = 'Plugins';
 $lang['users_groups'] = 'Groups';
 $lang['users_users_storage'] = 'Users Storage';
+$lang['users_password_is_too_short'] = 'Password is too short.';
+$lang['users_password_cannot_be_changed_on_this_account'] = 'Password can not be changed on this account.';
