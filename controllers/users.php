@@ -421,6 +421,8 @@ class Users extends ClearOS_Controller
             } else {
                 $data['limits'] = array();
             }
+            // FIXME: disable for 6.5.0 Beta 2
+            $data['limits'] = array();
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
