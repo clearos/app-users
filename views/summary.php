@@ -133,6 +133,8 @@ foreach ($users as $username => $info) {
     else
         $full_name = $info['core']['first_name'] . ' ' . $info['core']['last_name'];
 
+    $full_name = (strlen($full_name) >= 30) ? substr($full_name, 0, 30) . '...' : $full_name;
+
     $item['title'] = $username;
     $item['action'] = '/app/users/edit/' . $username;
     $item['anchors'] = button_set($buttons);

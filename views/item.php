@@ -102,7 +102,10 @@ foreach ($info_map['core'] as $key_name => $details) {
         $core_read_only = TRUE;
     else
         $core_read_only = $read_only;
-    
+
+    // Trim long values in read-only mode (notably, long names coming out of AD)
+    if ($core_read_only == TRUE)
+        $value = (strlen($value) >= 40) ? substr($value, 0, 40) . '...' : $value;
 
     if ($details['field_type'] === 'list') {
         echo field_dropdown($name, $details['field_options'], $value, $description, $core_read_only);
