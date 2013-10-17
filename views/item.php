@@ -35,6 +35,7 @@
 
 $this->lang->load('base');
 $this->lang->load('users');
+$this->lang->load('groups');
 
 ///////////////////////////////////////////////////////////////////////////////
 // Form modes
@@ -237,6 +238,20 @@ if (! empty($groups)) {
     }
 
     echo fieldset_header(lang('users_groups'));
+    echo field_radio_set('', $group_radios);
+    echo fieldset_footer();
+}
+
+if (! empty($windows_groups)) {
+    $group_radios = array();
+
+    foreach ($windows_groups as $group) {
+        $group_state = in_array($group, $user_info['groups']);
+        $group_key = strtr(base64_encode($group), '+/=', '-_:'); // spaces and dollars not allowed, so munge
+        $group_radios[] = field_checkbox("windows_group[$group_key]", $group_state, $group, $read_only);
+    }
+
+    echo fieldset_header(lang('groups_windows_groups'));
     echo field_radio_set('', $group_radios);
     echo fieldset_footer();
 }

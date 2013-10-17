@@ -247,11 +247,18 @@ class Users extends ClearOS_Controller
 
         // FIXME: catch validation for full name uniqueness
 
-        $driver = $this->accounts_configuration->get_driver();
-        $groups = $this->group_manager->get_list(Group_Engine::FILTER_NORMAL);
-        $info_map = $this->user->get_info_map();
         $password = ($this->input->post('password')) ? $this->input->post('password') : '';
         $verify = ($this->input->post('verify')) ? $this->input->post('verify') : '';
+        $info_map = $this->user->get_info_map();
+        $driver = $this->accounts_configuration->get_driver();
+        $groups = $this->group_manager->get_list(Group_Engine::FILTER_NORMAL);
+
+        if ($this->group_manager->show_windows_groups())
+            $windows_groups = $this->group_manager->get_list(Group_Engine::FILTER_WINDOWS);
+        else
+            $windows_groups = array();
+
+        $all_groups = array_merge($groups, $windows_groups);
 
         // Validate core
         //--------------
@@ -301,7 +308,7 @@ class Users extends ClearOS_Controller
         // Validate groups
         //----------------
     
-        foreach ($groups as $group)
+        foreach ($all_groups as $group)
             $this->form_validation->set_policy("group[$group]", 'accounts/Accounts_Engine', 'validate_plugin_state');
 
         $form_ok = $this->form_validation->run();
@@ -366,12 +373,23 @@ class Users extends ClearOS_Controller
                 // Group memberships
                 //------------------
 
-                $group_memberships = array();
                 $group_inputs = $this->input->post('group');
+                $windows_group_inputs = $this->input->post('windows_group');
 
-                foreach ($groups as $group) {
+                if (!is_array($group_inputs))
+                    $group_inputs = array();
+
+                if (!is_array($windows_group_inputs))
+                    $windows_group_inputs = array();
+
+                $all_inputs = array_merge($group_inputs, $windows_group_inputs);
+                $all_groups = array_merge($groups, $windows_groups);
+
+                $group_memberships = array();
+
+                foreach ($all_groups as $group) {
                     $group_key = strtr(base64_encode($group), '+/=', '-_:'); // spaces and dollars not allowed, so munge
-                    $group_memberships[$group] = (isset($group_inputs[$group_key]) && ($group_inputs[$group_key] == 'on')) ? TRUE : FALSE;
+                    $group_memberships[$group] = (isset($all_inputs[$group_key]) && ($all_inputs[$group_key] == 'on')) ? TRUE : FALSE;
                 }
 
                 $this->user->set_group_memberships($group_memberships);
@@ -408,6 +426,7 @@ class Users extends ClearOS_Controller
             $data['extensions'] = $this->accounts->get_extensions();
             $data['plugins'] = $this->accounts->get_plugins();
             $data['groups'] = $groups;
+            $data['windows_groups'] = $windows_groups;
 
             if ($form_type === 'add')
                 $data['user_info'] = $this->user->get_info_defaults();
