@@ -27,7 +27,7 @@ $app['subcategory'] = lang('base_subcategory_accounts');
 
 $app['requires'] = array(
     'app-accounts',
-    'app-groups',
+    'app-groups >= 1:1.5.10',
 );
 
 $app['core_requires'] = array(

@@ -436,12 +436,10 @@ class Users extends ClearOS_Controller
             // Load subscription information
             if (clearos_library_installed('clearcenter/Subscription_Manager')) {
                 $this->load->library('clearcenter/Subscription_Manager');
-                $data['limits'] = $this->subscription_manager->get_extension_limits();
+                $data['limits'] = $this->subscription_manager->get_user_limits();
             } else {
                 $data['limits'] = array();
             }
-            // FIXME: disable for 6.5.0 Beta 2
-            $data['limits'] = array();
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;

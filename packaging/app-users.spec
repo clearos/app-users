@@ -11,7 +11,7 @@ Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
 Requires: app-accounts
-Requires: app-groups
+Requires: app-groups >= 1:1.5.10
 
 %description
 The users app allows an administrator to create, delete and modify users on the system.  Marketplace apps that plugin directly to the user directory will automatically display options available to a user account.

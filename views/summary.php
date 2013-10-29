@@ -29,6 +29,8 @@
 //  
 ///////////////////////////////////////////////////////////////////////////////
 
+use \clearos\apps\clearcenter\Subscription_Engine as Subscription_Engine;
+
 ///////////////////////////////////////////////////////////////////////////////
 // Load dependencies
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,15 +45,10 @@ $this->lang->load('users');
 if (!empty($subscriptions)) {
 
     foreach ($subscriptions as $app => $subscription) {
-        if ($subscription['warning_message'] && $subscription['type'] === 'user') {
-            $link = '/app/marketplace/view/' . $subscription['marketplace_link'];
-            $buttons = array(
-                anchor_custom($link, lang('base_marketplace'))
-            );
+        if ($subscription['warning_message'] && $subscription['type'] === Subscription_Engine::TYPE_USER) {
 
             $item['title'] = $subscription['app_name'];
             $item['action'] = $link;
-            $item['anchors'] = button_set($buttons);
             $item['details'] = array(
                 $subscription['app_name'],
                 $subscription['warning_message'],
@@ -61,22 +58,25 @@ if (!empty($subscriptions)) {
         }
     }
 
-    // FIXME: a nice warning icon would be nice
-    $headers = array(
-        lang('base_app'),
-        lang('base_subscription')
-    );
+    if (!empty($warning_items)) {
+        // TODO: a nice warning icon would be nice
+        $headers = array(
+            lang('base_app'),
+            lang('base_subscription')
+        );
 
-    $options['default_rows'] = 50;
-    $options['sort'] = FALSE;
+        $options['default_rows'] = 50;
+        $options['sort'] = FALSE;
+        $options['no_action'] = TRUE;
 
-    echo summary_table(
-        lang('base_subscription_warnings'),
-        array(),
-        $headers,
-        $warning_items,
-        $options
-    );
+        echo summary_table(
+            lang('base_subscription_warnings'),
+            array(),
+            $headers,
+            $warning_items,
+            $options
+        );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

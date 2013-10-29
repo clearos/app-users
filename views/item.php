@@ -173,7 +173,7 @@ foreach ($info_map['extensions'] as $extension => $parameters) {
             // If an extension has reached its user limit, disable the field listed in user_key
             // to prevent administrator from borking their server by going over count.
 
-            if (array_key_exists($extension, $limits) && ($key_name === $limits[$extension]['user_key'])) {
+            if (array_key_exists($extension, $limits['extension']) && in_array($key_name, $limits['extension'][$extension])) {
                 // if in "add" mode, set to read-only and set value to disabled
                 if ($form_type === 'add') {
                     $field_read_only = TRUE;
