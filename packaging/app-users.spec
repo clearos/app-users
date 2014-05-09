@@ -1,7 +1,7 @@
 
 Name: app-users
 Epoch: 1
-Version: 1.5.10
+Version: 1.6.0
 Release: 1%{dist}
 Summary: Users
 License: GPLv3
@@ -78,7 +78,6 @@ exit 0
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/users/packaging
-%exclude /usr/clearos/apps/users/tests
 %dir /usr/clearos/apps/users
 /usr/clearos/apps/users/deploy
 /usr/clearos/apps/users/language
