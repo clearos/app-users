@@ -130,9 +130,9 @@ echo fieldset_footer();
 ///////////////////////////////////////////////////////////////////////////////
 
 if (! $read_only) {
-    echo fieldset_header(lang('users_password'));
-    echo field_password('password', '', lang('users_password'), $read_only);
-    echo field_password('verify', '', lang('users_verify'), $read_only);
+    echo fieldset_header(lang('base_password'));
+    echo field_password('password', '', lang('base_password'), $read_only);
+    echo field_password('verify', '', lang('base_verify'), $read_only);
     echo fieldset_footer();
 }
 

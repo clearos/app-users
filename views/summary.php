@@ -99,7 +99,7 @@ if ($mode === 'edit') {
 ///////////////////////////////////////////////////////////////////////////////
 
 $headers = array(
-    lang('users_username'),
+    lang('base_username'),
     lang('users_full_name'),
 );
 
