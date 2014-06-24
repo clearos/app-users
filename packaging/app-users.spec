@@ -1,7 +1,7 @@
 
 Name: app-users
 Epoch: 1
-Version: 1.6.0
+Version: 1.6.5
 Release: 1%{dist}
 Summary: Users
 License: GPLv3
@@ -14,7 +14,7 @@ Requires: app-accounts
 Requires: app-groups >= 1:1.5.10
 
 %description
-The users app allows an administrator to create, delete and modify users on the system.  Marketplace apps that plugin directly to the user directory will automatically display options available to a user account.
+The users app allows an administrator to create, delete and modify users on the system.  Other apps that plugin directly to the user directory will automatically display options available to a user account.
 
 %package core
 Summary: Users - Core
@@ -27,7 +27,7 @@ Requires: app-storage-core >= 1:1.4.7
 Requires: openssl
 
 %description core
-The users app allows an administrator to create, delete and modify users on the system.  Marketplace apps that plugin directly to the user directory will automatically display options available to a user account.
+The users app allows an administrator to create, delete and modify users on the system.  Other apps that plugin directly to the user directory will automatically display options available to a user account.
 
 This package provides the core API and libraries.
 
