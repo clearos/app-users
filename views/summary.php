@@ -65,16 +65,16 @@ if (!empty($subscriptions)) {
             lang('base_subscription')
         );
 
-        $options['default_rows'] = 50;
-        $options['sort'] = FALSE;
-        $options['no_action'] = TRUE;
+        $sub_options['default_rows'] = 50;
+        $sub_options['sort'] = FALSE;
+        $sub_options['no_action'] = TRUE;
 
         echo summary_table(
             lang('base_subscription_warnings'),
             array(),
             $headers,
             $warning_items,
-            $options
+            $sub_options
         );
     }
 }
