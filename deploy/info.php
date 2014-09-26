@@ -45,3 +45,16 @@ $app['core_file_manifest'] = array(
         'mode' => '0755',
     ),
 );
+
+/////////////////////////////////////////////////////////////////////////////
+// Dashboard Widgets
+/////////////////////////////////////////////////////////////////////////////
+
+$app['dashboard_widgets'] = array(
+    $app['category'] => array(
+        'users/dashboard_widgets/summary' => array(
+            'title' => lang('users_users_and_groups'),
+            'restricted' => FALSE,
+        )
+    )
+);
