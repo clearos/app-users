@@ -52,7 +52,7 @@ $app['core_file_manifest'] = array(
 
 $app['dashboard_widgets'] = array(
     $app['category'] => array(
-        'users/dashboard_widgets/summary' => array(
+        'users/users_dashboard/summary' => array(
             'title' => lang('users_users_and_groups'),
             'restricted' => FALSE,
         )

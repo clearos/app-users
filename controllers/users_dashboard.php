@@ -52,7 +52,7 @@ use \clearos\apps\groups\Group_Engine as Group_Engine;
  * @link       http://www.clearfoundation.com/docs/developer/apps/users/
  */
 
-class Dashboard_Widgets extends ClearOS_Controller
+class Users_Dashboard extends ClearOS_Controller
 {
     /**
      * Default controller
