@@ -83,8 +83,10 @@ class Users_Dashboard extends ClearOS_Controller
 
         $this->load->module('accounts/status');
 
-        if ($this->status->unhappy())
+        if ($this->status->unhappy()) {
             $data['not_available'];
+            return;
+        }
 
         // Show cache widget if using remote accounts (e.g. AD)
         //-----------------------------------------------------
