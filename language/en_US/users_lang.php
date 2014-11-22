@@ -48,5 +48,5 @@ $lang['users_user_not_found'] = 'User not found.';
 $lang['users_username_invalid'] = 'Username is invalid.';
 $lang['users_username_is_reserved'] = 'Username is reserved.';
 $lang['users_users'] = 'Users';
-$lang['users_users_and_groups'] = 'Users & Groups';
+$lang['users_users_and_groups'] = 'Users and Groups';
 $lang['users_users_storage'] = 'Users Storage';
