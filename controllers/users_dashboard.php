@@ -84,7 +84,8 @@ class Users_Dashboard extends ClearOS_Controller
         $this->load->module('accounts/status');
 
         if ($this->status->unhappy()) {
-            $data['not_available'];
+            // $data['not_available'];
+            $this->page->view_form('users/dashboard/unavailable', $data, lang('users_users_and_groups'));
             return;
         }
 
