@@ -389,7 +389,7 @@ class Users extends ClearOS_Controller
 
                 foreach ($all_groups as $group) {
                     $group_key = strtr(base64_encode($group), '+/=', '-_:'); // spaces and dollars not allowed, so munge
-                    $group_memberships[$group] = (isset($all_inputs[$group_key]) && ($all_inputs[$group_key] == 'on')) ? TRUE : FALSE;
+                    $group_memberships[$group] = (isset($all_inputs[$group_key]) && ($all_inputs[$group_key] == 1)) ? TRUE : FALSE;
                 }
 
                 $this->user->set_group_memberships($group_memberships);
