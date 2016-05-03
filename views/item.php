@@ -229,31 +229,27 @@ foreach ($info_map['extensions'] as $extension => $parameters) {
 ///////////////////////////////////////////////////////////////////////////////
 
 if (! empty($groups)) {
-    $group_radios = array();
 
+    echo fieldset_header(lang('users_groups'));
     foreach ($groups as $group) {
         $group_state = in_array($group, $user_info['groups']);
         $group_key = strtr(base64_encode($group), '+/=', '-_:'); // spaces and dollars not allowed, so munge
-        $group_radios[] = field_checkbox("group[$group_key]", $group_state, $group, $read_only);
+        echo field_checkbox("group[$group_key]", $group_state, $group, $read_only);
     }
-
-    echo fieldset_header(lang('users_groups'));
-    echo field_radio_set('', $group_radios);
     echo fieldset_footer();
+
 }
 
 if (! empty($windows_groups)) {
-    $group_radios = array();
 
+    echo fieldset_header(lang('groups_windows_groups'));
     foreach ($windows_groups as $group) {
         $group_state = in_array($group, $user_info['groups']);
         $group_key = strtr(base64_encode($group), '+/=', '-_:'); // spaces and dollars not allowed, so munge
-        $group_radios[] = field_checkbox("windows_group[$group_key]", $group_state, $group, $read_only);
+        echo field_checkbox("windows_group[$group_key]", $group_state, $group, $read_only);
     }
-
-    echo fieldset_header(lang('groups_windows_groups'));
-    echo field_radio_set('', $group_radios);
     echo fieldset_footer();
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////

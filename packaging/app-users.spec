@@ -1,7 +1,7 @@
 
 Name: app-users
 Epoch: 1
-Version: 2.1.25
+Version: 2.1.26
 Release: 1%{dist}
 Summary: Users
 License: GPLv3
