@@ -1,7 +1,7 @@
 
 Name: app-users
 Epoch: 1
-Version: 2.1.26
+Version: 2.1.27
 Release: 1%{dist}
 Summary: Users
 License: GPLv3
@@ -25,6 +25,7 @@ Requires: app-base >= 1:1.5.5
 Requires: app-accounts-core
 Requires: app-storage-core >= 1:1.4.7
 Requires: openssl
+Requires: csplugin-events
 
 %description core
 The users app allows an administrator to create, delete and modify users on the system.  Other apps that plugin directly to the user directory will automatically display options available to a user account.
@@ -53,6 +54,13 @@ if [ $1 -eq 1 ]; then
 fi
 
 [ -x /usr/clearos/apps/users/deploy/upgrade ] && /usr/clearos/apps/users/deploy/upgrade
+if [ -x /usr/bin/eventsctl -a -S /var/lib/csplugin-events/eventsctl.socket ]; then
+    /usr/bin/eventsctl -R --type USERS_ADD_USER --basename users
+    /usr/bin/eventsctl -R --type USERS_UPDATE_USER --basename users
+    /usr/bin/eventsctl -R --type USERS_DELETE_USER --basename users
+    /usr/bin/eventsctl -R --type USERS_RESET_PASSWORD --basename users
+
+fi
 
 exit 0
 
@@ -65,6 +73,13 @@ fi
 if [ $1 -eq 0 ]; then
     logger -p local6.notice -t installer 'app-users-core - uninstalling'
     [ -x /usr/clearos/apps/users/deploy/uninstall ] && /usr/clearos/apps/users/deploy/uninstall
+fi
+if [ -x /usr/bin/eventsctl -a -S /var/lib/csplugin-events/eventsctl.socket ]; then
+    /usr/bin/eventsctl -D --type USERS_ADD_USER
+    /usr/bin/eventsctl -D --type USERS_UPDATE_USER
+    /usr/bin/eventsctl -D --type USERS_DELETE_USER
+    /usr/bin/eventsctl -D --type USERS_RESET_PASSWORD
+
 fi
 
 exit 0

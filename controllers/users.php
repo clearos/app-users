@@ -34,6 +34,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 use \clearos\apps\accounts\Accounts_Engine as Accounts_Engine;
+use \clearos\apps\events\Event_Utils as Event_Utils;
+use \clearos\apps\events\Events as Events;
 use \clearos\apps\accounts\Accounts_Not_Initialized_Exception as Accounts_Not_Initialized_Exception;
 use \clearos\apps\accounts\Accounts_Driver_Not_Set_Exception as Accounts_Driver_Not_Set_Exception;
 use \clearos\apps\groups\Group_Engine as Group_Engine;
@@ -168,12 +170,18 @@ class Users extends ClearOS_Controller
         //---------------
 
         $this->load->factory('users/User_Factory', $username);
+        $this->load->library('events/Events');
+        $this->load->library('events/Event_Utils');
 
         // Handle form submit
         //-------------------
 
         try {
             $this->user->delete();
+            Event_Utils::add_event(
+                lang('base_administrator') . ' ' . $this->session->userdata('username') . ': ' . lang('users_deleted_account') . ' "' . $username . '"',
+                Events::SEVERITY_WARNING, 'USERS_DELETE_USER', 'users'
+            );
             $this->page->set_status_deleted();
             redirect('/users');
         } catch (Exception $e) {
@@ -241,6 +249,8 @@ class Users extends ClearOS_Controller
         $this->load->factory('groups/Group_Manager_Factory');
         $this->load->factory('accounts/Accounts_Factory');
         $this->load->library('accounts/Accounts_Configuration');
+        $this->load->library('events/Events');
+        $this->load->library('events/Event_Utils');
 
         // Validate prep
         //--------------
@@ -357,8 +367,17 @@ class Users extends ClearOS_Controller
 
                 if ($form_type === 'add') {
                     $add_retval = $this->user->add($this->input->post('user_info'), $this->input->post('password'));
+                    Event_Utils::add_event(
+                        lang('base_administrator') . ' ' . $this->session->userdata('username') . ': ' . lang('users_added_user') . ' "' . $username . '"',
+                        Events::SEVERITY_INFO, 'USERS_ADD_USER', 'users'
+                    );
                 } else if ($form_type === 'edit') {
                     $this->user->update($this->input->post('user_info'));
+                    Event_Utils::add_event(
+                        lang('base_administrator') . ' ' . $this->session->userdata('username') . ': ' .
+                        lang('users_updated_settings_on_account') . ' "' . $username . '"',
+                        Events::SEVERITY_INFO, 'USERS_UPDATE_USER', 'users'
+                    );
 
                     // Only update the password if it was changed
                     if ($password || $verify) {
@@ -366,6 +385,11 @@ class Users extends ClearOS_Controller
                             $this->input->post('password'),
                             $this->input->post('verify'),
                             $username
+                        );
+                        Event_Utils::add_event(
+                            lang('base_administrator') . ' ' . $this->session->userdata('username') . ': ' .
+                            lang('users_reset_password_on_account') . ' "' . $username . '"',
+                            Events::SEVERITY_WARNING, 'USERS_RESET_PASSWORD', 'users'
                         );
                     }
                 }

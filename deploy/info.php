@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'users';
-$app['version'] = '2.1.26';
+$app['version'] = '2.1.27';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -58,3 +58,15 @@ $app['dashboard_widgets'] = array(
         )
     )
 );
+
+/////////////////////////////////////////////////////////////////////////////
+// App Events
+/////////////////////////////////////////////////////////////////////////////
+
+$app['event_types'] = array(
+    'USERS_ADD_USER',
+    'USERS_UPDATE_USER',
+    'USERS_DELETE_USER',
+    'USERS_RESET_PASSWORD',
+);
+
