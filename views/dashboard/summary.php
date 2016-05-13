@@ -50,12 +50,21 @@ if (!empty($subscriptions)) {
     }
 }
 
-$options = array (
-    'buttons' => array(
-        anchor_custom('/app/users/add', lang('users_add_user')),
-        anchor_custom('/app/groups/add', lang('users_create_group'), 'low')
-    )
-);
+if ($read_write) {
+    $options = array (
+        'buttons' => array(
+            anchor_custom('/app/users/add', lang('users_add_user')),
+            anchor_custom('/app/groups/add', lang('users_create_group'), 'low')
+        )
+    );
+} else {
+    $options = array (
+        'buttons' => array(
+            anchor_custom('/app/users', lang('users_users')),
+            anchor_custom('/app/groups', lang('users_groups'), 'low')
+        )
+    );
+}
 
 echo form_open();
 echo form_header(lang('users_users_and_groups'));

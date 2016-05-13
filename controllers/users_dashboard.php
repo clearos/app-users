@@ -33,6 +33,7 @@
 // D E P E N D E N C I E S
 ///////////////////////////////////////////////////////////////////////////////
 
+use \clearos\apps\accounts\Accounts_Factory as Accounts_Factory;
 use \clearos\apps\accounts\Accounts_Engine as Accounts_Engine;
 use \clearos\apps\groups\Group_Engine as Group_Engine;
 
@@ -47,7 +48,7 @@ use \clearos\apps\groups\Group_Engine as Group_Engine;
  * @package    users
  * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2011-2016 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/users/
  */
@@ -117,6 +118,12 @@ class Users_Dashboard extends ClearOS_Controller
                 $data['subscriptions'] = array();
             }
         }
+
+        // We need to know if adding user is possible
+        $this->load->factory('accounts/Accounts_Factory');
+        $data['read_write'] = FALSE;
+        if ($this->accounts->get_capability() === Accounts_Engine::CAPABILITY_READ_WRITE)
+            $data['read_write'] = TRUE;
 
         // Load views
         //-----------
