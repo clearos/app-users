@@ -63,7 +63,7 @@ class Users_Dashboard extends ClearOS_Controller
 
     function index()
     {
-        echo "Invalid dashboard widget...not sure how you got here.";
+        echo "Invalid dashboard widget... not sure how you got here.";
     }
 
     /**
