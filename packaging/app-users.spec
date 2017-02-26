@@ -1,7 +1,7 @@
 
 Name: app-users
 Epoch: 1
-Version: 2.1.27
+Version: 2.3.20
 Release: 1%{dist}
 Summary: Users
 License: GPLv3
@@ -54,12 +54,14 @@ if [ $1 -eq 1 ]; then
 fi
 
 [ -x /usr/clearos/apps/users/deploy/upgrade ] && /usr/clearos/apps/users/deploy/upgrade
+
 if [ -x /usr/bin/eventsctl -a -S /var/lib/csplugin-events/eventsctl.socket ]; then
     /usr/bin/eventsctl -R --type USERS_ADD_USER --basename users
     /usr/bin/eventsctl -R --type USERS_UPDATE_USER --basename users
     /usr/bin/eventsctl -R --type USERS_DELETE_USER --basename users
     /usr/bin/eventsctl -R --type USERS_RESET_PASSWORD --basename users
-
+else
+    logger -p local6.notice -t installer 'app-users - events system not running, unable to register custom types.'
 fi
 
 exit 0
@@ -74,12 +76,14 @@ if [ $1 -eq 0 ]; then
     logger -p local6.notice -t installer 'app-users-core - uninstalling'
     [ -x /usr/clearos/apps/users/deploy/uninstall ] && /usr/clearos/apps/users/deploy/uninstall
 fi
+
 if [ -x /usr/bin/eventsctl -a -S /var/lib/csplugin-events/eventsctl.socket ]; then
     /usr/bin/eventsctl -D --type USERS_ADD_USER
     /usr/bin/eventsctl -D --type USERS_UPDATE_USER
     /usr/bin/eventsctl -D --type USERS_DELETE_USER
     /usr/bin/eventsctl -D --type USERS_RESET_PASSWORD
-
+else
+    logger -p local6.notice -t installer 'app-users - events system not running, unable to unregister custom types.'
 fi
 
 exit 0
@@ -93,6 +97,7 @@ exit 0
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/users/packaging
+%exclude /usr/clearos/apps/users/unify.json
 %dir /usr/clearos/apps/users
 /usr/clearos/apps/users/deploy
 /usr/clearos/apps/users/language
