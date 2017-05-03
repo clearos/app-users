@@ -106,9 +106,13 @@ class Users_Dashboard extends ClearOS_Controller
             $this->load->factory('users/User_Manager_Factory');
             $this->load->factory('groups/Group_Manager_Factory');
 
-            $data['num_users'] = count($this->user_manager->get_core_details());
-            $groups = $this->group_manager->get_list();
-            $data['num_groups'] = count($groups);
+            try {
+                $data['num_users'] = count($this->user_manager->get_core_details());
+                $groups = $this->group_manager->get_list();
+                $data['num_groups'] = count($groups);
+            } catch (\Exception $e) {
+                $data['errmsg'] = clearos_exception_message($e);
+            }
 
             // Load subscription information
             if (clearos_library_installed('clearcenter/Subscription_Manager')) {

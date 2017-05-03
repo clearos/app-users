@@ -7,7 +7,7 @@
  * @package    users
  * @subpackage views
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2011-2017 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/users/
  */
@@ -68,8 +68,13 @@ if ($read_write) {
 
 echo form_open();
 echo form_header(lang('users_users_and_groups'));
-echo field_view(lang('users_users'), $num_users);
-echo field_view(lang('users_groups'), $num_groups);
+if (isset($errmsg)) {
+    unset($options);
+    echo infobox_warning(lang('base_warning'), $errmsg);
+} else {
+    echo field_view(lang('users_users'), $num_users);
+    echo field_view(lang('users_groups'), $num_groups);
+}
 if (!empty($warnings)) {
     echo modal_info(
         'dashboard_user_error',
