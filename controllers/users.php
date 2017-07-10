@@ -180,7 +180,9 @@ class Users extends ClearOS_Controller
             $this->user->delete();
             Event_Utils::add_event(
                 lang('base_administrator') . ' ' . $this->session->userdata('username') . ': ' . lang('users_deleted_account') . ' "' . $username . '"',
-                Events::SEVERITY_WARNING, 'USERS_DELETE_USER', 'users'
+                Events::SEVERITY_WARNING, 'USERS_DELETE_USER', 'users',
+                FALSE,
+                $username
             );
             $this->page->set_status_deleted();
             redirect('/users');
@@ -369,14 +371,18 @@ class Users extends ClearOS_Controller
                     $add_retval = $this->user->add($this->input->post('user_info'), $this->input->post('password'));
                     Event_Utils::add_event(
                         lang('base_administrator') . ' ' . $this->session->userdata('username') . ': ' . lang('users_added_user') . ' "' . $username . '"',
-                        Events::SEVERITY_INFO, 'USERS_ADD_USER', 'users'
+                        Events::SEVERITY_INFO, 'USERS_ADD_USER', 'users',
+                        FALSE,
+                        $username
                     );
                 } else if ($form_type === 'edit') {
                     $this->user->update($this->input->post('user_info'));
                     Event_Utils::add_event(
                         lang('base_administrator') . ' ' . $this->session->userdata('username') . ': ' .
                         lang('users_updated_settings_on_account') . ' "' . $username . '"',
-                        Events::SEVERITY_INFO, 'USERS_UPDATE_USER', 'users'
+                        Events::SEVERITY_INFO, 'USERS_UPDATE_USER', 'users',
+                        FALSE,
+                        $username
                     );
 
                     // Only update the password if it was changed
@@ -389,7 +395,9 @@ class Users extends ClearOS_Controller
                         Event_Utils::add_event(
                             lang('base_administrator') . ' ' . $this->session->userdata('username') . ': ' .
                             lang('users_reset_password_on_account') . ' "' . $username . '"',
-                            Events::SEVERITY_WARNING, 'USERS_RESET_PASSWORD', 'users'
+                            Events::SEVERITY_WARNING, 'USERS_RESET_PASSWORD', 'users',
+                            FALSE,
+                            $username
                         );
                     }
                 }
