@@ -124,7 +124,7 @@ class User_Engine extends Engine
     ///////////////////////////////////////////////////////////////////////////////
 
     public static $builtin_list = array(
-        'openfire-focus',
+        'focus',
         'email-archive',
         'flexshare',
         'guest',
