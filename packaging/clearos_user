@@ -1,0 +1,178 @@
+#!/usr/clearos/sandbox/usr/bin/php
+<?php
+
+/**
+ * ClearOS User PW Update.
+ *
+ * @category   apps
+ * @package    n/a
+ * @subpackage scripts
+ * @author     ClearFoundation <developer@clearfoundation.com>
+ * @copyright  2015 ClearFoundation
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
+ * @link       http://www.clearfoundation.com/docs/developer/apps/users/
+ */
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+// B O O T S T R A P
+///////////////////////////////////////////////////////////////////////////////
+
+$bootstrap = getenv('CLEAROS_BOOTSTRAP') ? getenv('CLEAROS_BOOTSTRAP') : '/usr/clearos/framework/shared';
+require_once $bootstrap . '/bootstrap.php';
+
+///////////////////////////////////////////////////////////////////////////////
+// T R A N S L A T I O N S
+///////////////////////////////////////////////////////////////////////////////
+
+clearos_load_language('base');
+clearos_load_language('users');
+
+///////////////////////////////////////////////////////////////////////////////
+// D E P E N D E N C I E S
+///////////////////////////////////////////////////////////////////////////////
+
+// Classes
+//--------
+
+use \clearos\apps\users\User_Factory as User_Factory;
+
+clearos_load_library('users/User_Factory');
+
+// Exceptions
+//-----------
+
+use \Exception as Exception;
+
+///////////////////////////////////////////////////////////////////////////////
+// M A I N
+///////////////////////////////////////////////////////////////////////////////
+
+//--------------------------------------------------------------------
+// Command line options
+//--------------------------------------------------------------------
+
+$short_options  = '';
+
+// Common
+$short_options .= 'u:';  // Username
+$short_options .= 'p:';  // Password
+$short_options .= 'd';   // Delete flag
+$short_options .= 'a';   // Add flag
+$short_options .= 'f:';  // First name
+$short_options .= 'l:';  // Last name
+$short_options .= 'o:';  // Output
+$short_options .= 'h';   // Help
+
+$helpopts  = '
+  Common Options
+  --------------
+
+  -u=username
+  -p=password (eg. set new password)
+  -a (add account - requires -p, -f and -l flags to be set)
+  -d (delete account)
+  -f=first name
+  -l=last name
+  -o=output (json [default] or stdout)
+  -h: help
+
+   Examples
+   ========
+   
+   Add a user:
+   ./clearos_user -a -u bob -p mypassword -f William -l Shatner
+
+   Update a user password:
+   ./clearos_user -u bob -p mypassword
+
+   Delete a user:
+   ./clearos_user -d -u bob
+
+
+';
+
+// Must be run as root
+if (php_sapi_name() === 'cli') {
+    $user = exec('whoami');
+    if ($user != 'root' && $user != 'webconfig') {
+        echo "Must be run as webconfig or superuser (root)\n";
+        exit(1);
+    }
+}
+
+// Handle command line options
+//----------------------------
+
+$options = getopt($short_options);
+
+$output = isset($options['o']) ? $options['o'] : 'json';
+$help = isset($options['h']) ? TRUE : FALSE;
+
+if ($help) {
+    echo "usage: " . $argv[0] . " -u <username> -p <new password>\n";
+    echo $helpopts;
+    exit(0);
+}
+if (!isset($options['u'])) {
+    echo "Requires -u username\n";
+    exit(1);
+}
+if (isset($options['a'])) {
+    if (!isset($options['p'])) {
+        echo "Requires -p password to add a user\n";
+        exit(1);
+    } else if (!isset($options['f'])) {
+        echo "Requires -f first name to add a user\n";
+        exit(1);
+    } else if (!isset($options['l'])) {
+        echo "Requires -l last name to add a user\n";
+        exit(1);
+    }
+}
+
+
+try {
+    $user_factory = new User_Factory();
+    $user = $user_factory->create($options['u']);
+    if (!isset($options['a']) && isset($options['p'])) {
+        $user->reset_password(
+            $options['p'],
+            $options['p'],
+            $options['u']
+        );
+    } else if (isset($options['d'])) {
+        $user->delete();
+        echo "User " . $options['u'] . " deleted.\n";
+    } else if (isset($options['a'])) {
+        error_reporting(0);
+        $user_info = array();
+        $user_info['core']['username'] = $options['u'];
+        $user_info['core']['first_name'] = $options['f'];
+        $user_info['core']['last_name'] = $options['l'];
+        $user_info['extensions'] = array();
+        $user->add($user_info, $options['p']);
+        echo "User " . $options['u'] . " added.\n";
+    }
+
+} catch (Exception $e) {
+    echo clearos_exception_message($e) . "\n";
+}
+
+// vim: syntax=php

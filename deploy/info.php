@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'users';
-$app['version'] = '2.3.25';
+$app['version'] = '2.3.26';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -42,6 +42,10 @@ $app['core_file_manifest'] = array(
     'users_default.conf' => array ('target' => '/etc/clearos/storage.d/users_default.conf'),
     'userpasswd' => array(
         'target' => '/usr/sbin/userpasswd',
+        'mode' => '0755',
+    ),
+    'clearos_user' => array(
+        'target' => '/usr/sbin/clearos_user',
         'mode' => '0755',
     ),
 );

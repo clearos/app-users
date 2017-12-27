@@ -1,7 +1,7 @@
 
 Name: app-users
 Epoch: 1
-Version: 2.3.25
+Version: 2.3.26
 Release: 1%{dist}
 Summary: Users
 License: GPLv3
@@ -40,6 +40,7 @@ This package provides the core API and libraries.
 mkdir -p -m 755 %{buildroot}/usr/clearos/apps/users
 cp -r * %{buildroot}/usr/clearos/apps/users/
 
+install -D -m 0755 packaging/clearos_user %{buildroot}/usr/sbin/clearos_user
 install -D -m 0755 packaging/userpasswd %{buildroot}/usr/sbin/userpasswd
 install -D -m 0644 packaging/users_default.conf %{buildroot}/etc/clearos/storage.d/users_default.conf
 
@@ -102,5 +103,6 @@ exit 0
 /usr/clearos/apps/users/deploy
 /usr/clearos/apps/users/language
 /usr/clearos/apps/users/libraries
+/usr/sbin/clearos_user
 /usr/sbin/userpasswd
 /etc/clearos/storage.d/users_default.conf
