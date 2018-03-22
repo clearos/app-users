@@ -161,7 +161,7 @@ class User_Engine extends Engine
         // The low-level password policy engine handles minimum password lengths,
         // password histories, etc.
 
-        if (strlen($password) > self::MAX_PASSWORD_LENGTH)
+        if (strlen($password) == 0 || strlen($password) > self::MAX_PASSWORD_LENGTH)
             return lang('users_password_invalid');
     }
 }
