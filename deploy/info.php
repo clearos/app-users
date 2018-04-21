@@ -5,8 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'users';
-$app['version'] = '2.4.1';
-$app['release'] = '1';
+$app['version'] = '2.5.0';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
 $app['license'] = 'GPLv3';
@@ -27,11 +26,12 @@ $app['subcategory'] = lang('base_subcategory_accounts');
 
 $app['requires'] = array(
     'app-accounts',
+    'app-base',
     'app-groups >= 1:1.5.10',
 );
 
 $app['core_requires'] = array(
-    'app-base >= 1:1.5.5',
+    'app-base-core >= 1:1.5.5',
     'app-accounts-core',
     'app-storage-core >= 1:1.4.7',
     'openssl',

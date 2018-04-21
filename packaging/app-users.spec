@@ -1,27 +1,30 @@
 
 Name: app-users
 Epoch: 1
-Version: 2.4.1
+Version: 2.5.0
 Release: 1%{dist}
 Summary: Users
 License: GPLv3
-Group: ClearOS/Apps
+Group: Applications/Apps
+Packager: ClearFoundation
+Vendor: ClearFoundation
 Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
 Requires: app-accounts
+Requires: app-base
 Requires: app-groups >= 1:1.5.10
 
 %description
 The users app allows an administrator to create, delete and modify users on the system.  Other apps that plugin directly to the user directory will automatically display options available to a user account.
 
 %package core
-Summary: Users - Core
+Summary: Users - API
 License: LGPLv3
-Group: ClearOS/Libraries
+Group: Applications/API
 Requires: app-base-core
-Requires: app-base >= 1:1.5.5
+Requires: app-base-core >= 1:1.5.5
 Requires: app-accounts-core
 Requires: app-storage-core >= 1:1.4.7
 Requires: openssl
