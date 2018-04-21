@@ -272,6 +272,11 @@ class Users extends ClearOS_Controller
 
         $all_groups = array_merge($groups, $windows_groups);
 
+        if ($form_type == 'add') {
+            $this->form_validation->set_policy('password', 'users/User_Engine', 'validate_password', TRUE);
+            $this->form_validation->set_policy('verify', 'users/User_Engine', 'validate_password', TRUE);
+        }
+
         // Validate core
         //--------------
 
